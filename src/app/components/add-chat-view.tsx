@@ -1,7 +1,7 @@
 export default function AddChatView(props: any) {
   function addChatView() {
     console.log("Add Chat View");
-    alert("Add Chat View");
+    alert("Not yet implemented");
   }
 
   return (
