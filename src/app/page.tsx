@@ -16,7 +16,7 @@ export default function Home() {
   const ref = useRef<HTMLParagraphElement>(null);
 
   const [isWaiting, setIsWaiting] = useState<boolean>(false);
-  const [settingsOpen, setSettingsOpen] = useState<boolean>(true);
+  const [settingsOpen, setSettingsOpen] = useState<boolean>(false);
   const selectedOpenAiModelRef = useRef<HTMLInputElement>(null);
   const selectedGeminiModelRef = useRef<HTMLInputElement>(null);
   const selectedAnthropicModelRef = useRef<HTMLInputElement>(null);
@@ -26,6 +26,16 @@ export default function Home() {
   const [anthropicApiKey, setAnthropicApiKey] = useState<string>("");
 
   let llmsProcessing = 0;
+
+  function finishProcessing() {
+    llmsProcessing--;
+
+    if (llmsProcessing == 0) {
+      setIsWaiting(false);
+      if (inputRef.current) inputRef.current.value = "";
+      inputRef.current?.focus();
+    }
+  }
 
   async function openAiApiRequest() {
     llmsProcessing++;
@@ -46,11 +56,7 @@ export default function Home() {
       }),
     });
     const data = await response.json();
-    llmsProcessing--;
-
-    if (llmsProcessing == 0) {
-      setIsWaiting(false);
-    }
+    finishProcessing();
 
     setOpenAiMessages((prev) => [...prev, userMessage, data]);
   }
@@ -74,10 +80,7 @@ export default function Home() {
       }),
     });
     const data = await response.json();
-    llmsProcessing--;
-    if (llmsProcessing == 0) {
-      setIsWaiting(false);
-    }
+    finishProcessing();
     setGeminiMessages((prev) => [...prev, userMessage, data]);
   }
   async function anthropicApiRequest() {
@@ -99,10 +102,7 @@ export default function Home() {
       }),
     });
     const data = await response.json();
-    llmsProcessing--;
-    if (llmsProcessing == 0) {
-      setIsWaiting(false);
-    }
+    finishProcessing();
 
     if (data.error) {
       alert(data.error.message);
