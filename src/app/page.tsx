@@ -14,8 +14,13 @@ export default function Home() {
 
   const [isWaiting, setIsWaiting] = useState<boolean>(false);
 
+  let llmsProcessing = 0;
+
   async function chatApiRequest() {
+    llmsProcessing++;
+
     const query = inputRef.current?.value;
+    const userMessage = { role: "user", content: query };
     const response = await fetch("/api/openai/generate-message", {
       method: "POST",
       headers: {
@@ -23,16 +28,23 @@ export default function Home() {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        messages: [...openAiMessages, { role: "user", content: query }],
+        messages: [...openAiMessages, userMessage],
       }),
     });
-    setOpenAiMessages([...openAiMessages, query]);
     const data = await response.json();
-    ref && ref.current && (ref.current.innerText = data.content);
+    llmsProcessing--;
+
+    if (llmsProcessing == 0) {
+      setIsWaiting(false);
+    }
+
+    setOpenAiMessages((prev) => [...prev, userMessage, data]);
   }
 
   async function geminiApiRequest() {
+    llmsProcessing++;
     const query = inputRef.current?.value;
+    const userMessage = { role: "user", content: query };
     const response = await fetch("/api/gemini/generate-message", {
       method: "POST",
       headers: {
@@ -40,21 +52,23 @@ export default function Home() {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        messages: [...geminiMessages, { role: "user", content: query }],
-        query: query,
+        messages: [...geminiMessages],
+        query: userMessage.content,
         model: "gemini-1.5-pro",
       }),
     });
     const data = await response.json();
-    setGeminiMessages([...geminiMessages, query, data.content]);
-    // ref && ref.current && (ref.current.innerText = data.content);
+    llmsProcessing--;
+    if (llmsProcessing == 0) {
+      setIsWaiting(false);
+    }
+    setGeminiMessages((prev) => [...prev, userMessage, data]);
   }
 
   async function performLlmQuery() {
     setIsWaiting(true);
-    // await chatApiRequest();
-    await geminiApiRequest().catch((error) => alert(error));
-    setIsWaiting(false);
+    chatApiRequest().catch((error) => alert(error));
+    geminiApiRequest().catch((error) => alert(error));
   }
 
   return (
@@ -65,7 +79,18 @@ export default function Home() {
           <p className="w-24 text-xs">let&apos;s actually compare these models 🤨</p>
         </div>
         <div className="w-full flex items-center justify-center">
-          <input disabled={isWaiting} ref={inputRef} className="w-[20rem] sm:w-[30rem] h-10 rounded-full px-4 text-black" type="text" placeholder="Query" />
+          <input
+            onKeyDown={(event) => {
+              if (event.key === "Enter") {
+                performLlmQuery();
+              }
+            }}
+            disabled={isWaiting}
+            ref={inputRef}
+            className="w-[20rem] sm:w-[30rem] h-10 rounded-full px-4 text-black"
+            type="text"
+            placeholder="Query"
+          />
           {isWaiting ? (
             <p className="h-18 w-18  text-3xl animate-spin">⏳</p>
           ) : (
