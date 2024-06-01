@@ -24,6 +24,16 @@ export default function ChatView(props: any) {
     }
   }
 
+  function titleCase(str: string) {
+    return str
+      .toLowerCase()
+      .split(" ")
+      .map(function (word) {
+        return word.charAt(0).toUpperCase() + word.slice(1);
+      })
+      .join(" ");
+  }
+
   return (
     <div className="m-6 h-[30rem] text-white overflow-y-auto border-white border-2 p-3 rounded-lg">
       <div className="flex gap-4">
@@ -43,11 +53,11 @@ export default function ChatView(props: any) {
       </div>
       <div>
         {props.messages.map((message: any, index: number) => (
-          <div key={index} className="flex gap-4">
-            <div className="p-2 rounded-xl flex items-center">
-              <p className="w-20 font-bold">{message.role}:</p>
+          <div key={index} className="grid grid-cols-1 lg:flex items-start">
+            <div className="p-1 lg:p-2 rounded-xl flex items-center justify-start">
+              <p className="w-20 font-bold">{titleCase(message.role)}:</p>
             </div>
-            <div className=" p-2 rounded-xl flex items-center">
+            <div className="p-1 lg:p-2 rounded-xl flex items-center">
               <p>{message.content}</p>
             </div>
           </div>
