@@ -3,12 +3,12 @@ import SettingsIcon from "../icons/SettingsIcon";
 
 export default function AppBar(props: any) {
   return (
-    <div className="w-full h-20 flex lg:fixed">
-      <div className="flex items-center px-4 gap-4 absolute h-full">
-        <Image src="/logo.png" alt="logo" width={130} height={130} />
+    <div className="w-full pb-6 flex flex-col text-white">
+      <div className="flex lg:items-center py-4 px-4 gap-4 flex-row w-full object-contain">
+        <Image src="/logo.png" className="object-contain" alt="logo" width={130} height={40} />
         <p className="w-24 text-xs">let&apos;s actually compare these models 🤨</p>
       </div>
-      <div className="w-full flex items-center justify-center">
+      <div className="w-full flex items-center justify-center px-4">
         <input
           onKeyDown={(event) => {
             if (event.key === "Enter") {
@@ -17,7 +17,7 @@ export default function AppBar(props: any) {
           }}
           disabled={props.isWaiting}
           ref={props.inputRef}
-          className="w-[20rem] sm:w-[30rem] h-10 rounded-full px-4 text-black"
+          className="w-full sm:w-[30rem] h-10 rounded-full px-4 text-black"
           type="text"
           placeholder="Query"
         />
