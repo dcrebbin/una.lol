@@ -121,8 +121,8 @@ export default function Home() {
   async function performLlmQuery() {
     setIsWaiting(true);
     openAiApiRequest().catch(handleErrorResponse);
-    // geminiApiRequest().catch(handleErrorResponse);
-    // anthropicApiRequest().catch(handleErrorResponse);
+    geminiApiRequest().catch(handleErrorResponse);
+    anthropicApiRequest().catch(handleErrorResponse);
   }
 
   function setApiKeysIfAvailable() {
