@@ -19,11 +19,11 @@ export async function POST(req: Request, res: Response) {
         role: "system",
         content: "",
       },
+      ...messages,
       {
         role: "user",
         content: json.query,
       },
-      ...messages,
     ],
   });
   const response = await fetch("https://api.openai.com/v1/chat/completions", {
@@ -32,6 +32,9 @@ export async function POST(req: Request, res: Response) {
     method: "POST",
   });
   const data = await response.json();
+  if(data.error) {
+    return new Response(JSON.stringify({ error: data.error }));
+  }
   const generatedMessage: MessageSchema = {
     role: "assistant",
     content: data.choices[0].message.content,

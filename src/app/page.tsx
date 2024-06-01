@@ -52,7 +52,8 @@ export default function Home() {
       },
       body: JSON.stringify({
         model: selectedModel,
-        messages: [userMessage, ...openAiMessages],
+        messages: [...openAiMessages],
+        query: userMessage.content,
       }),
     });
     const data = await response.json();
@@ -120,8 +121,8 @@ export default function Home() {
   async function performLlmQuery() {
     setIsWaiting(true);
     openAiApiRequest().catch(handleErrorResponse);
-    geminiApiRequest().catch(handleErrorResponse);
-    anthropicApiRequest().catch(handleErrorResponse);
+    // geminiApiRequest().catch(handleErrorResponse);
+    // anthropicApiRequest().catch(handleErrorResponse);
   }
 
   function setApiKeysIfAvailable() {
