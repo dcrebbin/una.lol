@@ -2,9 +2,9 @@
 import React, { useRef } from "react";
 import { useState } from "react";
 import ChatView from "./components/chat-view";
-import Image from "next/image";
 import { GENERATE_MESSAGE_ENDPOINT } from "@/constants/config";
 import AddChatView from "./components/add-chat-view";
+import AppBar from "./components/app-bar";
 
 export default function Home() {
   const [openAiMessages, setOpenAiMessages] = useState<string[]>([]);
@@ -121,33 +121,7 @@ export default function Home() {
 
   return (
     <main className="flex min-h-screen flex-col h-[100vh]">
-      <div className="w-full h-20 flex lg:fixed">
-        <div className="flex items-center px-4 gap-4 absolute h-full">
-          <Image src="/logo.png" alt="logo" width={130} height={130} />
-          <p className="w-24 text-xs">let&apos;s actually compare these models 🤨</p>
-        </div>
-        <div className="w-full flex items-center justify-center">
-          <input
-            onKeyDown={(event) => {
-              if (event.key === "Enter") {
-                performLlmQuery();
-              }
-            }}
-            disabled={isWaiting}
-            ref={inputRef}
-            className="w-[20rem] sm:w-[30rem] h-10 rounded-full px-4 text-black"
-            type="text"
-            placeholder="Query"
-          />
-          {isWaiting ? (
-            <p className="h-18 w-18  text-3xl animate-spin">⏳</p>
-          ) : (
-            <button className="h-18 w-18 rounded-full  text-white text-3xl" onClick={performLlmQuery}>
-              🔍
-            </button>
-          )}
-        </div>
-      </div>
+      <AppBar performLlmQuery={performLlmQuery} inputRef={inputRef} isWaiting={isWaiting} />
       <div className=" bg-[#161616] h-fit mx-2 xl:mx-16 rounded-t-[3rem] xl:mt-20 grid grid-cols-1 lg:grid-cols-2">
         <ChatView modelRef={selectedOpenAiModelRef} messages={openAiMessages} provider={"openai"} ref={ref} />
         <ChatView modelRef={selectedGeminiModelRef} messages={geminiMessages} provider={"gemini"} ref={ref} />
