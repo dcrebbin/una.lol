@@ -44,7 +44,7 @@ export default function Settings(props: any) {
                   <p>
                     We&apos;re <strong>open source!</strong> Find out more here
                   </p>
-                  <a target="_" href="https://github.com/dcrebbin/up-it-quest-next">
+                  <a target="_" href="https://github.com/dcrebbin/una.lol">
                     <MdiGithub className="w-8 h-8 hover:text-blue-600"></MdiGithub>
                   </a>
                 </div>
