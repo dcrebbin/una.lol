@@ -41,9 +41,18 @@ export default function ChatView(props: any) {
           </select>
         </div>
       </div>
-      <p className="p-3" ref={props.ref}>
-        {props.messages}
-      </p>
+      <div>
+        {props.messages.map((message: any, index: number) => (
+          <div key={index} className="flex gap-4">
+            <div className="p-2 rounded-xl flex items-center">
+              <p className="w-20 font-bold">{message.role}:</p>
+            </div>
+            <div className=" p-2 rounded-xl flex items-center">
+              <p>{message.content}</p>
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
