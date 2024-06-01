@@ -3,6 +3,7 @@ import React, { useRef } from "react";
 import { useState } from "react";
 import ChatView from "./components/chat-view";
 import Image from "next/image";
+import { GENERATE_MESSAGE_ENDPOINT } from "@/constants/config";
 
 export default function Home() {
   const [openAiMessages, setOpenAiMessages] = useState<string[]>([]);
@@ -26,7 +27,8 @@ export default function Home() {
     const query = inputRef.current?.value;
     const selectedModel = selectedOpenAiModelRef.current?.value;
     const userMessage = { role: "user", content: query };
-    const response = await fetch("/api/openai/generate-message", {
+    const provider = "openai";
+    const response = await fetch(`/api/${provider}/${GENERATE_MESSAGE_ENDPOINT}`, {
       method: "POST",
       headers: {
         "x-api-key": process.env.NEXT_PUBLIC_OPENAI_API_KEY as string,
@@ -34,7 +36,7 @@ export default function Home() {
       },
       body: JSON.stringify({
         model: selectedModel,
-        messages: [...openAiMessages, userMessage],
+        messages: [...openAiMessages],
       }),
     });
     const data = await response.json();
@@ -52,7 +54,8 @@ export default function Home() {
     const query = inputRef.current?.value;
     const selectedModel = selectedGeminiModelRef.current?.value;
     const userMessage = { role: "user", content: query };
-    const response = await fetch("/api/gemini/generate-message", {
+    const provider = "gemini";
+    const response = await fetch(`/api/${provider}/${GENERATE_MESSAGE_ENDPOINT}`, {
       method: "POST",
       headers: {
         "x-api-key": process.env.NEXT_PUBLIC_GEMINI_API_KEY as string,
@@ -71,11 +74,48 @@ export default function Home() {
     }
     setGeminiMessages((prev) => [...prev, userMessage, data]);
   }
+  async function anthropicApiRequest() {
+    llmsProcessing++;
+    const query = inputRef.current?.value;
+    const selectedModel = selectedAnthropicModelRef.current?.value;
+    const userMessage = { role: "user", content: query };
+    const provider = "anthropic";
+    const response = await fetch(`/api/${provider}/${GENERATE_MESSAGE_ENDPOINT}`, {
+      method: "POST",
+      headers: {
+        "x-api-key": process.env.NEXT_PUBLIC_ANTHROPIC_API_KEY as string,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        messages: [...anthropicMessages],
+        query: userMessage.content,
+        model: selectedModel,
+      }),
+    });
+    const data = await response.json();
+    llmsProcessing--;
+    if (llmsProcessing == 0) {
+      setIsWaiting(false);
+    }
+
+    if (data.error) {
+      alert(data.error.message);
+      return;
+    }
+    setAnthropicMessages((prev) => [...prev, userMessage, data]);
+  }
+
+  function handleErrorResponse(error: any) {
+    console.error(error);
+    alert("An error occurred. Please try again.");
+    setIsWaiting(false);
+  }
 
   async function performLlmQuery() {
     setIsWaiting(true);
-    chatApiRequest().catch((error) => alert(error));
-    geminiApiRequest().catch((error) => alert(error));
+    chatApiRequest().catch(handleErrorResponse);
+    geminiApiRequest().catch(handleErrorResponse);
+    anthropicApiRequest().catch(handleErrorResponse);
   }
 
   return (

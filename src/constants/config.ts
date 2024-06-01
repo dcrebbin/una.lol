@@ -44,3 +44,5 @@ export const GEMINI_MODELS = [
     key: "gemini-1.0-pro",
   },
 ];
+
+export const GENERATE_MESSAGE_ENDPOINT = "generate-message";
