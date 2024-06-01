@@ -52,7 +52,7 @@ export default function Home() {
       },
       body: JSON.stringify({
         model: selectedModel,
-        messages: [...openAiMessages],
+        messages: [userMessage, ...openAiMessages],
       }),
     });
     const data = await response.json();
