@@ -3,7 +3,7 @@ import SettingsIcon from "../icons/SettingsIcon";
 
 export default function AppBar(props: any) {
   return (
-    <div className="w-full pb-6 flex flex-col text-white fixed">
+    <div className="w-full pb-6 flex flex-col text-white fixed backdrop-blur-[2px]">
       <div className="flex lg:items-center py-4 px-4 gap-4 flex-row w-full object-contain">
         <Image src="/logo.png" className="object-contain" alt="logo" width={130} height={40} />
         <p className="w-24 text-xs">let&apos;s actually compare these models 🤨</p>
