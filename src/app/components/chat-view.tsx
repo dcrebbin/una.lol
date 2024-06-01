@@ -32,7 +32,7 @@ export default function ChatView(props: any) {
         </div>
         <div className="flex items-center">
           <p>Model:</p>
-          <select className="bg-[#161616] text-white rounded-full w-fit h-8 font-bold">
+          <select ref={props.modelRef} className="bg-[#161616] text-white rounded-full w-fit h-8 font-bold">
             {determineModelList()?.map((model) => (
               <option key={model.key} value={model.key}>
                 {model.name}

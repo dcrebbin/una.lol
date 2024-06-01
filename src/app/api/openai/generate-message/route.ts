@@ -7,13 +7,13 @@ export async function POST(req: Request, res: Response) {
   const json = await req.json();
   const apiKey = req.headers.get("x-api-key");
   const messages: MessageSchema[] = json.messages;
-
+  const model = json.model;
   const headers: any = {
     "Content-Type": "application/json",
     Authorization: `Bearer ${apiKey}`,
   };
   const body = JSON.stringify({
-    model: "gpt-4o",
+    model: model,
     messages: [
       {
         role: "system",

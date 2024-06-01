@@ -14,12 +14,17 @@ export default function Home() {
 
   const [isWaiting, setIsWaiting] = useState<boolean>(false);
 
+  const selectedOpenAiModelRef = useRef<HTMLInputElement>(null);
+  const selectedGeminiModelRef = useRef<HTMLInputElement>(null);
+  const selectedAnthropicModelRef = useRef<HTMLInputElement>(null);
+
   let llmsProcessing = 0;
 
   async function chatApiRequest() {
     llmsProcessing++;
 
     const query = inputRef.current?.value;
+    const selectedModel = selectedOpenAiModelRef.current?.value;
     const userMessage = { role: "user", content: query };
     const response = await fetch("/api/openai/generate-message", {
       method: "POST",
@@ -28,6 +33,7 @@ export default function Home() {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
+        model: selectedModel,
         messages: [...openAiMessages, userMessage],
       }),
     });
@@ -44,6 +50,7 @@ export default function Home() {
   async function geminiApiRequest() {
     llmsProcessing++;
     const query = inputRef.current?.value;
+    const selectedModel = selectedGeminiModelRef.current?.value;
     const userMessage = { role: "user", content: query };
     const response = await fetch("/api/gemini/generate-message", {
       method: "POST",
@@ -54,7 +61,7 @@ export default function Home() {
       body: JSON.stringify({
         messages: [...geminiMessages],
         query: userMessage.content,
-        model: "gemini-1.5-pro",
+        model: selectedModel,
       }),
     });
     const data = await response.json();
@@ -101,9 +108,9 @@ export default function Home() {
         </div>
       </div>
       <div className=" bg-[#161616] h-fit mx-2 xl:mx-16 rounded-t-[3rem] xl:mt-20 grid grid-cols-1 lg:grid-cols-2">
-        <ChatView messages={openAiMessages} provider={"openai"} ref={ref} />
-        <ChatView messages={geminiMessages} provider={"gemini"} ref={ref} />
-        <ChatView messages={anthropicMessages} provider={"anthropic"} ref={ref} />
+        <ChatView modelRef={selectedOpenAiModelRef} messages={openAiMessages} provider={"openai"} ref={ref} />
+        <ChatView modelRef={selectedGeminiModelRef} messages={geminiMessages} provider={"gemini"} ref={ref} />
+        <ChatView modelRef={selectedAnthropicModelRef} messages={anthropicMessages} provider={"anthropic"} ref={ref} />
       </div>
     </main>
   );
