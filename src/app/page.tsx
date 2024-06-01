@@ -1,12 +1,14 @@
 "use client";
-import { OPEN_AI_MODELS } from "@/constants/config";
-import Image from "next/image";
 import React, { useRef } from "react";
 import { useState } from "react";
+import ChatView from "./components/chat-view";
+import Image from "next/image";
 
 export default function Home() {
   // eslint-disable-next-line react-hooks/rules-of-hooks
-  const [messages, setMessages] = useState<string[]>([]);
+  const [openAiMessages, setOpenAiMessages] = useState<string[]>([]);
+  const [geminiMessages, setGeminiMessages] = useState<string[]>([]);
+  const [anthropicMessages, setAnthropicMessages] = useState<string[]>([]);
 
   const inputRef = useRef<HTMLInputElement>(null);
   const ref = useRef<HTMLParagraphElement>(null);
@@ -20,10 +22,10 @@ export default function Home() {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        messages: [...messages, { role: "user", content: query }],
+        messages: [...openAiMessages, { role: "user", content: query }],
       }),
     });
-    setMessages([...messages, query]);
+    setOpenAiMessages([...openAiMessages, query]);
     const data = await response.json();
     ref && ref.current && (ref.current.innerText = data.content);
   }
@@ -43,27 +45,9 @@ export default function Home() {
         </div>
       </div>
       <div className=" bg-[#161616] h-fit mx-2 xl:mx-16 rounded-t-[3rem] xl:mt-20 grid grid-cols-1 lg:grid-cols-2">
-        <div className="m-6 h-[30rem] overflow-y-auto border-white border-2 p-3 rounded-lg">
-          <div className="flex gap-4">
-            <Image src="/icons/llms/openai.png" className="invert" alt="logo" width={130} height={50} />
-            <div className="flex items-center">
-              <p>Model:</p>
-              <select className="bg-[#161616] text-white rounded-full w-24 h-8 font-bold">
-                {OPEN_AI_MODELS.map((model) => (
-                  <option key={model.key} value={model.key}>
-                    {model.name}
-                  </option>
-                ))}
-              </select>
-            </div>
-          </div>
-          <p className="p-3" ref={ref}>
-            This is some text
-          </p>
-        </div>
-        <div className="bg-blue-500 m-6 h-[30rem]"></div>
-        <div className="bg-green-500 m-6 h-[30rem]"></div>
-        <div className="bg-yellow-500 m-6 h-[30rem]"></div>
+        <ChatView messages={openAiMessages} provider={"openai"} ref={ref} />
+        <ChatView messages={geminiMessages} provider={"gemini"} ref={ref} />
+        <ChatView messages={anthropicMessages} provider={"anthropic"} ref={ref} />
       </div>
     </main>
   );
