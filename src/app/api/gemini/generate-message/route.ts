@@ -1,4 +1,5 @@
 import { GoogleGenerativeAI, HarmBlockThreshold, HarmCategory } from "@google/generative-ai";
+import { MessageSchema } from "../../openai/generate-message/route";
 
 const generationConfig = {
   temperature: 1,
@@ -39,20 +40,26 @@ export async function POST(req: Request, res: Response) {
     model: model,
   });
 
+  const convertedHistory = messages.map((message: MessageSchema) => {
+    return {
+      role: message.role == "assistant" ? "model" : message.role,
+      parts: [{ text: message.content }],
+    };
+  });
+
   const chatSession = generativeModel.startChat({
     generationConfig,
     safetySettings,
-    history: [],
+    history: convertedHistory,
   });
   const result = await chatSession.sendMessage(query).catch((error) => {
     console.error(error);
     return error;
   });
 
-  const responseMessage = result.response.candidates[0].content.parts[0].text;
-  return new Response(
-    JSON.stringify({
-      content: responseMessage,
-    })
-  );
+  const generatedMessage: MessageSchema = {
+    role: "assistant",
+    content: result.response.candidates[0].content.parts[0].text,
+  };
+  return new Response(JSON.stringify(generatedMessage));
 }
