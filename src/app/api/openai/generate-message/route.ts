@@ -19,6 +19,10 @@ export async function POST(req: Request, res: Response) {
         role: "system",
         content: "",
       },
+      {
+        role: "user",
+        content: json.query,
+      },
       ...messages,
     ],
   });
