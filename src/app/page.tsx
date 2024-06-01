@@ -4,6 +4,7 @@ import { useState } from "react";
 import ChatView from "./components/chat-view";
 import Image from "next/image";
 import { GENERATE_MESSAGE_ENDPOINT } from "@/constants/config";
+import AddChatView from "./components/add-chat-view";
 
 export default function Home() {
   const [openAiMessages, setOpenAiMessages] = useState<string[]>([]);
@@ -151,6 +152,7 @@ export default function Home() {
         <ChatView modelRef={selectedOpenAiModelRef} messages={openAiMessages} provider={"openai"} ref={ref} />
         <ChatView modelRef={selectedGeminiModelRef} messages={geminiMessages} provider={"gemini"} ref={ref} />
         <ChatView modelRef={selectedAnthropicModelRef} messages={anthropicMessages} provider={"anthropic"} ref={ref} />
+        <AddChatView />
       </div>
     </main>
   );
