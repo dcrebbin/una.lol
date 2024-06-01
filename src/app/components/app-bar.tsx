@@ -1,4 +1,5 @@
 import Image from "next/image";
+import SettingsIcon from "../icons/SettingsIcon";
 
 export default function AppBar(props: any) {
   return (
@@ -28,6 +29,14 @@ export default function AppBar(props: any) {
           </button>
         )}
       </div>
+      <button
+        onClick={() => {
+          props.setSettingsOpen(true);
+        }}
+        className="absolute right-0 p-4 flex items-center text-xl font-bold"
+      >
+        <SettingsIcon />
+      </button>
     </div>
   );
 }
