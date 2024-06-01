@@ -13,7 +13,7 @@ export async function POST(req: Request, res: Response) {
     Authorization: `Bearer ${apiKey}`,
   };
   const body = JSON.stringify({
-    model: "gpt-4-turbo-preview",
+    model: "gpt-4o",
     messages: [
       {
         role: "system",
