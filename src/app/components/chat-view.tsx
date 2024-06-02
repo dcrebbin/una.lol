@@ -35,7 +35,7 @@ export default function ChatView(props: any) {
   }
 
   return (
-    <div className="m-6 h-[30rem] text-white overflow-y-auto border-white border-2 p-3 rounded-lg">
+    <div className="m-6 h-[30rem] text-white overflow-y-auto border-white border-2 p-3 rounded-lg resize">
       <div className="flex gap-4">
         <div className="bg-white p-2 rounded-xl w-24 flex items-center">
           <Image src={`${determineImage()}`} objectFit="contain" alt="logo" width={100} height={100} />
