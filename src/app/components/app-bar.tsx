@@ -39,7 +39,7 @@ export default function AppBar(props: any) {
       >
         <SettingsIcon />
       </button>
-      <div className="flex">
+      <div className="flex mr-0 relative lg:absolute right-0 lg:mr-20">
         <button
           onClick={() => {
             props.clearAllChats();
