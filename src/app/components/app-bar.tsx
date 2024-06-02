@@ -1,5 +1,7 @@
 import Image from "next/image";
 import SettingsIcon from "../icons/SettingsIcon";
+import DeleteIcon from "../icons/DeleteIcon";
+import DisplayGridIcon from "../icons/DisplayGridIcon";
 
 export default function AppBar(props: any) {
   return (
@@ -37,6 +39,24 @@ export default function AppBar(props: any) {
       >
         <SettingsIcon />
       </button>
+      <div className="flex">
+        <button
+          onClick={() => {
+            props.clearAllChats();
+          }}
+          className="p-4 flex items-center text-xl font-bold"
+        >
+          <DeleteIcon />
+        </button>
+        <button
+          onClick={() => {
+            alert("Display change not implemented yet");
+          }}
+          className="p-4 flex items-center text-xl font-bold"
+        >
+          <DisplayGridIcon />
+        </button>
+      </div>
     </div>
   );
 }

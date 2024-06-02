@@ -135,6 +135,12 @@ export default function Home() {
     setAnthropicApiKey(retrievedAnthropicApiKey ?? "");
   }
 
+  function clearAllChats() {
+    setOpenAiMessages([]);
+    setGeminiMessages([]);
+    setAnthropicMessages([]);
+  }
+
   useEffect(() => {
     setApiKeysIfAvailable();
   }, []);
@@ -142,8 +148,8 @@ export default function Home() {
   return (
     <main className="flex min-h-screen flex-col h-[100vh]">
       {settingsOpen ? <Settings setSettingsOpen={setSettingsOpen} openAiApiKey={openAiApiKey} anthropicApiKey={anthropicApiKey} geminiApiKey={geminiApiKey} setAnthropicApiKey={setAnthropicApiKey} setGeminiApiKey={setGeminiApiKey} setOpenAiApiKey={setOpenAiApiKey} /> : null}
-      <AppBar setSettingsOpen={setSettingsOpen} performLlmQuery={performLlmQuery} inputRef={inputRef} isWaiting={isWaiting} />
-      <div className=" bg-[#161616] h-fit mx-2 mt-40 lg:mt-20 xl:mx-16 rounded-t-[3rem] xl:mt-20 grid grid-cols-1 lg:grid-cols-2">
+      <AppBar clearAllChats={clearAllChats} setSettingsOpen={setSettingsOpen} performLlmQuery={performLlmQuery} inputRef={inputRef} isWaiting={isWaiting} />
+      <div className=" bg-[#161616] h-fit mx-2 mt-56 lg:mt-20 xl:mx-16 rounded-t-[3rem] xl:mt-20 grid grid-cols-1 lg:grid-cols-2">
         <ChatView modelRef={selectedOpenAiModelRef} messages={openAiMessages} provider={"openai"} ref={ref} />
         <ChatView modelRef={selectedGeminiModelRef} messages={geminiMessages} provider={"gemini"} ref={ref} />
         <ChatView modelRef={selectedAnthropicModelRef} messages={anthropicMessages} provider={"anthropic"} ref={ref} />
