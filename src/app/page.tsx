@@ -39,7 +39,7 @@ export default function Home() {
 
   async function openAiApiRequest() {
     llmsProcessing++;
-
+    const startTime = Date.now();
     const query = inputRef.current?.value;
     const selectedModel = selectedOpenAiModelRef.current?.value;
     const userMessage = { role: "user", content: query };
@@ -57,6 +57,10 @@ export default function Home() {
       }),
     });
     const data = await response.json();
+    const endTime = Date.now();
+    const timeTaken = endTime - startTime;
+    console.log("Time taken for OpenAI request:", timeTaken);
+    data.timeTaken = timeTaken;
     finishProcessing();
 
     setOpenAiMessages((prev) => [...prev, userMessage, data]);
@@ -64,6 +68,7 @@ export default function Home() {
 
   async function geminiApiRequest() {
     llmsProcessing++;
+    const startTime = Date.now();
     const query = inputRef.current?.value;
     const selectedModel = selectedGeminiModelRef.current?.value;
     const userMessage = { role: "user", content: query };
@@ -81,11 +86,16 @@ export default function Home() {
       }),
     });
     const data = await response.json();
+    const endTime = Date.now();
+    const timeTaken = endTime - startTime;
+    console.log("Time taken for OpenAI request:", timeTaken);
+    data.timeTaken = timeTaken;
     finishProcessing();
     setGeminiMessages((prev) => [...prev, userMessage, data]);
   }
   async function anthropicApiRequest() {
     llmsProcessing++;
+    const startTime = Date.now();
     const query = inputRef.current?.value;
     const selectedModel = selectedAnthropicModelRef.current?.value;
     const userMessage = { role: "user", content: query };
@@ -103,6 +113,10 @@ export default function Home() {
       }),
     });
     const data = await response.json();
+    const endTime = Date.now();
+    const timeTaken = endTime - startTime;
+    console.log("Time taken for OpenAI request:", timeTaken);
+    data.timeTaken = timeTaken;
     finishProcessing();
 
     if (data.error) {

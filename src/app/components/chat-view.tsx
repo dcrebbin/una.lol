@@ -55,7 +55,8 @@ export default function ChatView(props: any) {
         {props.messages.map((message: any, index: number) => (
           <div key={index} className="grid grid-cols-1 lg:flex items-start">
             <div className="p-1 lg:p-2 rounded-xl flex items-center justify-start">
-              <p className="w-20 font-bold">{titleCase(message.role)}:</p>
+              <p className="w-20 font-bold">{titleCase(message.role)}</p>
+              {message.timeTaken ? <p className="text-md">({(message.timeTaken / 1000).toString().slice(0, 3)}s)</p> : null}
             </div>
             <div className="p-1 lg:p-2 rounded-xl flex items-center">
               <p>{message.content}</p>
